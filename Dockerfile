@@ -1,4 +1,4 @@
-FROM wodby/php:7.2
+FROM wodby/php:7.2-dev-4.7.4
 
 USER root
 
