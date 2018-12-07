@@ -11,7 +11,8 @@ ENV BUILD_DEPS \
         pcre-dev \
         python \
         zlib-dev \
-        curl-dev
+        curl-dev \
+        icu-dev
 RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
     && cd /tmp \
     && git clone \
@@ -25,10 +26,15 @@ RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
     && pecl install -f rdkafka \
     && docker-php-ext-enable rdkafka \
     && rm -rf /tmp/librdkafka
-RUN pecl install -f raphf \
+RUN docker-php-ext-install intl; \
+    pecl install raphf-2.0.0 \
     && docker-php-ext-enable raphf \
-    &&  pecl install -f propro \
+    && pecl install propro-2.1.0 \
     && docker-php-ext-enable propro \
-    && pecl install -f pecl_http \
-    && docker-php-ext-enable http
+    && pecl install pecl_http-3.2.0 \
+    && docker-php-ext-enable http; \
+    chown -R wodby:wodby \
+        "${PHP_INI_DIR}/conf.d"; \
+    mv "${PHP_INI_DIR}/conf.d/docker-php-ext-raphf.ini" "${PHP_INI_DIR}/conf.d/docker-php-ext-1-raphf.ini"; \
+    mv "${PHP_INI_DIR}/conf.d/docker-php-ext-propro.ini" "${PHP_INI_DIR}/conf.d/docker-php-ext-2-propro.ini";
 RUN apk del .build-deps
