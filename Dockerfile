@@ -9,7 +9,9 @@ ENV BUILD_DEPS \
         build-base \
         git \
         pcre-dev \
-        python
+        python \
+        zlib-dev \
+      curl-dev
 RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
     && cd /tmp \
     && git clone \
@@ -22,5 +24,11 @@ RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
     && make install \
     && pecl install -f rdkafka \
     && docker-php-ext-enable rdkafka \
-    && rm -rf /tmp/librdkafka \
-    && apk del .build-deps
+    && rm -rf /tmp/librdkafka
+RUN pecl install -f raphf \
+    && docker-php-ext-enable raphf \
+    &&  pecl install -f propro \
+    && docker-php-ext-enable propro \
+    && pecl install -f pecl_http \
+    && docker-php-ext-enable http
+RUN apk del .build-deps
