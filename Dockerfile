@@ -35,6 +35,7 @@ RUN docker-php-ext-install intl; \
     && docker-php-ext-enable http; \
     chown -R wodby:wodby \
         "${PHP_INI_DIR}/conf.d"; \
+    # Ensure http extension loads after raphf and propro dependencies
     mv "${PHP_INI_DIR}/conf.d/docker-php-ext-raphf.ini" "${PHP_INI_DIR}/conf.d/docker-php-ext-1-raphf.ini"; \
     mv "${PHP_INI_DIR}/conf.d/docker-php-ext-propro.ini" "${PHP_INI_DIR}/conf.d/docker-php-ext-2-propro.ini";
 RUN apk del .build-deps
