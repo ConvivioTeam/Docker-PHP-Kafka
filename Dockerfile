@@ -11,7 +11,7 @@ ENV BUILD_DEPS \
         pcre-dev \
         python \
         zlib-dev \
-      curl-dev
+        curl-dev
 RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
     && cd /tmp \
     && git clone \
